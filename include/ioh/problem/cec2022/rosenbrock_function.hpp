@@ -29,7 +29,7 @@ namespace ioh::problem::cec2022
             {
                 double item = 0.0;
                 item = item + 100 * pow((pow(new_x.at(i), 2) - new_x.at(i + 1)), 2);
-                item = item + pow((new_x.at(i + 1) - 1), 2);
+                item = item + pow((new_x.at(i) - 1), 2);
                 result = result + item;
             }
             return result;
