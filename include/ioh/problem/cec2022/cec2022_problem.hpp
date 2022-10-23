@@ -1,7 +1,13 @@
 #pragma once
 
+#include "ioh/common/factory.hpp"
 #include "ioh/problem/problem.hpp"
 #include "ioh/problem/transformation.hpp"
+
+namespace ioh::common
+{
+
+} // namespace ioh::common
 
 namespace ioh::problem
 {
@@ -39,6 +45,8 @@ namespace ioh::problem
                            AutomaticProblemRegistration<ProblemType, Real>
     {
     protected:
+        int nx;
+
         std::vector<double> shift_func(const std::vector<double> &x)
         {
             std::vector<double> result;
@@ -48,6 +56,7 @@ namespace ioh::problem
             }
             return result;
         }
+
         std::vector<double> rotate_func(const std::vector<double> &x)
         {
             std::vector<double> result;
@@ -66,6 +75,7 @@ namespace ioh::problem
     public:
         std::vector<double> tvec_;
         std::vector<double> rvec_;
+
         /**
          * @brief Construct a new BBOProblem object
          *
@@ -77,6 +87,7 @@ namespace ioh::problem
         CEC2022Problem(const int problem_id, const int instance, const int n_variables, const std::string &name) :
             CEC2022(problem_id, instance, n_variables, name)
         {
+            nx = n_variables;
         }
     };
 } // namespace ioh::problem

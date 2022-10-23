@@ -11,14 +11,18 @@ namespace ioh::problem::cec2022
         //! Evaluation method
         double evaluate(const std::vector<double> &x) override
         {
+            // int nx = x.size();
+            std::vector<double> new_x;
+            new_x = shift_func(x);
+            new_x = rotate_func(new_x);
             auto result = 0.0;
-            std::vector<double> items = {0, 0};
-            for (size_t i = 0; i < x.size(); i++)
+            std::vector<double> terms = {0, 0};
+            for (int i = 0; i < nx; i++)
             {
-                items.at(0) += pow(x.at(i), 2);
-                items.at(1) += x.at(i) * 0.5;
+                terms.at(0) += pow(new_x.at(i), 2);
+                terms.at(1) += new_x.at(i) * 0.5;
             }
-            result = items.at(0) + pow(items.at(1), 2) + pow(items.at(1), 4);
+            result = terms.at(0) + pow(terms.at(1), 2) + pow(terms.at(1), 4);
             return result;
         }
 

@@ -18,18 +18,18 @@ namespace ioh::problem::cec2022
         //! Evaluation method
         double evaluate(const std::vector<double> &x) override
         {
-            std::vector<double> tempx;
-            tempx = shift_func(x);
-            // for (size_t i = 0; i < tempx.size(); i++)
+            std::vector<double> new_x;
+            new_x = shift_func(x);
+            // for (size_t i = 0; i < new_x.size(); i++)
             // {
-            //     double xi = tempx.at(i);
-            //     tempx.at(i) = xi * 0.5 / 100;
+            //     double xi = new_x.at(i);
+            //     new_x.at(i) = xi * 0.5 / 100;
             // }
-            // tempx = rotate_func(tempx);
+            // new_x = rotate_func(new_x);
             auto result = 0.0;
-            for (size_t i = 0; i < tempx.size(); i++)
+            for (size_t i = 0; i < new_x.size(); i++)
             {
-                result += schaffer(tempx.at(i), tempx.at((i + 1) % tempx.size()));
+                result += schaffer(new_x.at(i), new_x.at((i + 1) % new_x.size()));
             }
             return result;
         }

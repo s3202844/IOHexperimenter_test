@@ -5,7 +5,7 @@
 
 namespace ioh::problem::cec2022
 {
-    class RastriginFunction final : public CEC2022Problem<RastriginFunction>
+    class RosenbrockFunction final : public CEC2022Problem<RosenbrockFunction>
     {
     protected:
         //! Evaluation method
@@ -17,13 +17,20 @@ namespace ioh::problem::cec2022
             for (int i = 0; i < nx; i++)
             {
                 double xi = new_x.at(i);
-                new_x.at(i) = xi * 5.12 / 100;
+                new_x.at(i) = xi * 2.048 / 100;
             }
             new_x = rotate_func(new_x);
-            auto result = 0.0;
             for (int i = 0; i < nx; i++)
             {
-                result += pow(new_x.at(i), 2) - 10 * cos(2 * M_PI * new_x.at(i)) + 10;
+                new_x.at(i) += 1;
+            }
+            auto result = 0.0;
+            for (int i = 0; i < nx - 1; i++)
+            {
+                double item = 0.0;
+                item = item + 100 * pow((pow(new_x.at(i), 2) - new_x.at(i + 1)), 2);
+                item = item + pow((new_x.at(i + 1) - 1), 2);
+                result = result + item;
             }
             return result;
         }
@@ -35,8 +42,8 @@ namespace ioh::problem::cec2022
          * @param instance instance id
          * @param n_variables the dimension of the problem
          */
-        RastriginFunction(const int instance, const int n_variables) :
-            CEC2022Problem(1, instance, n_variables, "RastriginFunction")
+        RosenbrockFunction(const int instance, const int n_variables) :
+            CEC2022Problem(1, instance, n_variables, "RosenbrockFunction")
         {
         }
     };
