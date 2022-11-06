@@ -17,13 +17,13 @@ namespace ioh::problem::cec2022
             for (int i = 0; i < nx; i++)
             {
                 double xi = new_x.at(i);
-                new_x.at(i) = xi * 5.12 / 100;
+                new_x.at(i) = xi * 5.12 / 100.0;
             }
             new_x = rotate_func(new_x);
             auto result = 0.0;
             for (int i = 0; i < nx; i++)
             {
-                result += pow(new_x.at(i), 2) - 10 * cos(2 * M_PI * new_x.at(i)) + 10;
+                result += pow(new_x.at(i), 2) - 10.0 * cos(2.0 * M_PI * new_x.at(i)) + 10.0;
             }
             return result;
         }

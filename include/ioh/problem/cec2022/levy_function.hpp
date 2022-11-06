@@ -11,14 +11,8 @@ namespace ioh::problem::cec2022
         //! Evaluation method
         double evaluate(const std::vector<double> &x) override
         {
-            // int nx = x.size();
             std::vector<double> new_x;
             new_x = shift_func(x);
-            // for (int i = 0; i < nx; i++)
-            // {
-            //     double xi = new_x.at(i);
-            //     new_x.at(i) = xi * 5.12 / 100;
-            // }
             new_x = rotate_func(new_x);
 
             double *w;

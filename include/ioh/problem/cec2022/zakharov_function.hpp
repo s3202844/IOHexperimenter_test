@@ -20,7 +20,7 @@ namespace ioh::problem::cec2022
             for (int i = 0; i < nx; i++)
             {
                 terms.at(0) += pow(new_x.at(i), 2);
-                terms.at(1) += new_x.at(i) * 0.5;
+                terms.at(1) += 0.5 * (i + 1) * new_x.at(i);
             }
             result = terms.at(0) + pow(terms.at(1), 2) + pow(terms.at(1), 4);
             return result;

@@ -6,7 +6,7 @@ TEST_F(BaseTest, ZakharovFunction)
 {
     // const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
     std::ofstream file;
-    file.open("../F1.txt", std::ios::out);
+    file.open("/home/ian/cec_core/results/exp_data/F1.txt", std::ios::out);
     if (!file.is_open())
     {
         std::cout << "open failed" << std::endl;
@@ -32,7 +32,7 @@ TEST_F(BaseTest, RosenbrockFunction)
 {
     // const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
     std::ofstream file;
-    file.open("../F2.txt", std::ios::out);
+    file.open("/home/ian/cec_core/results/exp_data/F2.txt", std::ios::out);
     if (!file.is_open())
     {
         std::cout << "open failed" << std::endl;
@@ -54,11 +54,11 @@ TEST_F(BaseTest, RosenbrockFunction)
     file.close();
 }
 
-TEST_F(BaseTest, SchafferF6Function)
+TEST_F(BaseTest, SchafferF7Function)
 {
     // const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
     std::ofstream file;
-    file.open("../F3.txt", std::ios::out);
+    file.open("/home/ian/cec_core/results/exp_data/F3.txt", std::ios::out);
     if (!file.is_open())
     {
         std::cout << "open failed" << std::endl;
@@ -66,7 +66,7 @@ TEST_F(BaseTest, SchafferF6Function)
     std::vector<double> tvec = {7.9089392944746379e+01, -2.4572777647791789e+01};
     std::vector<double> rvec = {-8.1259572623023857e-01, 5.8282774960733563e-01, -5.8282774960733574e-01,
                                 -8.1259572623023846e-01};
-    auto problem = ioh::problem::cec2022::SchafferF6Function(1, 2);
+    auto problem = ioh::problem::cec2022::SchafferF7Function(1, 2);
     problem.tvec_ = tvec;
     problem.rvec_ = rvec;
     for (double x1 = -100.0; x1 <= 100.0; x1 += 0.5)
@@ -84,7 +84,7 @@ TEST_F(BaseTest, RastriginFunction)
 {
     // const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
     std::ofstream file;
-    file.open("../F4.txt", std::ios::out);
+    file.open("/home/ian/cec_core/results/exp_data/F4.txt", std::ios::out);
     if (!file.is_open())
     {
         std::cout << "open failed" << std::endl;
@@ -110,7 +110,7 @@ TEST_F(BaseTest, LevyFunction)
 {
     // const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
     std::ofstream file;
-    file.open("../F5.txt", std::ios::out);
+    file.open("/home/ian/cec_core/results/exp_data/F5.txt", std::ios::out);
     if (!file.is_open())
     {
         std::cout << "open failed" << std::endl;
