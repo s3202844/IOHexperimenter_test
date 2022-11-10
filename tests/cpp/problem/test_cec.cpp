@@ -45,7 +45,7 @@ TEST_F(BaseTest, cec2022_basic)
         {
             std::vector<double> x = {x1, x2};
             file1 << std::to_string(x1) << " " << std::to_string(x2) << " "
-                  << std::to_string((*problem_01)(x)) << std::endl;
+                  << std::to_string((*problem_01)(x)-300.0) << std::endl;
         }
     }
     file1.close();
@@ -61,7 +61,7 @@ TEST_F(BaseTest, cec2022_basic)
         {
             std::vector<double> x = {x1, x2};
             file2 << std::to_string(x1) << " " << std::to_string(x2) << " "
-                  << std::to_string((*problem_02)(x)) << std::endl;
+                  << std::to_string((*problem_02)(x)-400.0) << std::endl;
         }
     }
     file2.close();
@@ -77,7 +77,7 @@ TEST_F(BaseTest, cec2022_basic)
         {
             std::vector<double> x = {x1, x2};
             file3 << std::to_string(x1) << " " << std::to_string(x2) << " "
-                  << std::to_string((*problem_03)(x)) << std::endl;
+                  << std::to_string((*problem_03)(x)-600.0) << std::endl;
         }
     }
     file3.close();
@@ -93,7 +93,7 @@ TEST_F(BaseTest, cec2022_basic)
         {
             std::vector<double> x = {x1, x2};
             file4 << std::to_string(x1) << " " << std::to_string(x2) << " "
-                  << std::to_string((*problem_04)(x)) << std::endl;
+                  << std::to_string((*problem_04)(x)-800.0) << std::endl;
         }
     }
     file4.close();
@@ -109,9 +109,8 @@ TEST_F(BaseTest, cec2022_basic)
         {
             std::vector<double> x = {x1, x2};
             file5 << std::to_string(x1) << " " << std::to_string(x2) << " "
-                  << std::to_string((*problem_05)(x)) << std::endl;
+                  << std::to_string((*problem_05)(x)-900.0) << std::endl;
         }
     }
     file5.close();
-
 }

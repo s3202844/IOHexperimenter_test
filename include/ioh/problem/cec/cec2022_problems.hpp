@@ -11,7 +11,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            return cec::zakharov_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec::zakharov_func(sr_x, Os_, Mr_, true, true, nx_);
+            return f + 300.0;
         }
 
     public:
@@ -27,7 +28,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            return cec::rosenbrock_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec::rosenbrock_func(sr_x, Os_, Mr_, true, true, nx_);
+            return f + 400.0;
         }
 
     public:
@@ -43,7 +45,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            return cec::schaffer_F7_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec::schaffer_F7_func(sr_x, Os_, Mr_, true, true, nx_);
+            return f + 600.0;
         }
 
     public:
@@ -59,7 +62,9 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            return cec::step_rastrigin_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f =
+                cec::step_rastrigin_func(sr_x, Os_, Mr_, true, true, nx_);
+            return f + 800.0;
         }
 
     public:
@@ -75,7 +80,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            return cec::levy_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec::levy_func(sr_x, Os_, Mr_, true, true, nx_);
+            return f + 900.0;
         }
 
     public:
