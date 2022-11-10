@@ -111,6 +111,7 @@ namespace ioh::problem::cec
         fptMData.open(FileName);
         if (!fptMData)
         {
+            std::cout << FileName << std::endl;
             perror("Error: Cannot open input file for reading");
         }
         int MatrixSize = fn < funcTreshold ? dim * dim : dim * dim * coeff;

@@ -78,45 +78,32 @@ namespace ioh::problem::cec
     //     free(z);
     // }
 
-    // void levy_func(double *x, double *f, int nx, double *Os, double *Mr,
-    //                int s_flag, int r_flag)
-    // {
+    double levy_func(std::vector<double> &x, const std::vector<double> &Os,
+                     const std::vector<double> &Mr, bool s_flag, bool r_flag,
+                     int nx)
+    {
+        sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+        double *w;
+        w = (double *)malloc(sizeof(double) * nx);
+        for (int i = 0; i < nx; i++)
+        {
+            w[i] = 1.0 + (x.at(i) - 1.0) / 4.0;
+        }
+        double term1 = pow((sin(M_PI * w[0])), 2);
+        double term3 =
+            pow((w[nx - 1] - 1), 2) * (1 + pow((sin(2 * M_PI * w[nx - 1])), 2));
 
-    //     int i;
-    //     f[0] = 0.0;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-    //     sr_func(x, z, nx, Os, Mr, 1.0, s_flag, r_flag,
-    //             y); /* shift and rotate */
-
-    //     double *w = malloc(sizeof(double) * nx);
-
-    //     // double sum1 = 0.0;
-    //     for (i = 0; i < nx; i++)
-    //     {
-    //         w[i] = 1.0 + (z[i] - 0.0) / 4.0;
-    //     }
-
-    //     double term1 = pow((sin(M_PI * w[0])), 2);
-    //     double term3 =
-    //         pow((w[nx - 1] - 1), 2) * (1 + pow((sin(2 * M_PI * w[nx - 1])),
-    //         2));
-
-    //     double sum = 0.0;
-
-    //     for (i = 0; i < nx - 1; i++)
-    //     {
-    //         double wi = w[i];
-    //         double newv =
-    //             pow((wi - 1), 2) * (1 + 10 * pow((sin(M_PI * wi + 1)), 2));
-    //         sum = sum + newv;
-    //     }
-
-    //     f[0] = term1 + sum + term3;
-    //     free(w);
-    //     free(y);
-    //     free(z);
-    // }
+        double f = 0.0;
+        for (int i = 0; i < nx - 1; i++)
+        {
+            double wi = w[i];
+            double newv =
+                pow((wi - 1), 2) * (1 + 10 * pow((sin(M_PI * wi + 1)), 2));
+            f = f + newv;
+        }
+        f = term1 + f + term3;
+        return f;
+    }
 
     // void discus_func(double *x, double *f, int nx, double *Os, double *Mr,
     //                  int s_flag, int r_flag)
@@ -152,46 +139,45 @@ namespace ioh::problem::cec
     //     free(z);
     // }
 
-    // void rosenbrock_func(double *x, double *f, int nx, double *Os, double
-    // *Mr,
-    //                      int s_flag, int r_flag)
-    // {
-    //     int i;
-    //     double tmp1, tmp2;
-    //     f[0] = 0.0;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-    //     sr_func(x, z, nx, Os, Mr, 2.048 / 100.0, s_flag, r_flag, y);
-    //     z[0] += 1.0; // shift to orgin
-    //     for (i = 0; i < nx - 1; i++)
-    //     {
-    //         z[i + 1] += 1.0; // shift to orgin
-    //         tmp1 = z[i] * z[i] - z[i + 1];
-    //         tmp2 = z[i] - 1.0;
-    //         f[0] += 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
-    //     }
-    //     free(y);
-    //     free(z);
-    // }
+    double rosenbrock_func(std::vector<double> &x,
+                           const std::vector<double> &Os,
+                           const std::vector<double> &Mr, bool s_flag,
+                           bool r_flag, int nx)
+    {
+        sr_func(x, Os, Mr, 2.048 / 100.0, s_flag, r_flag, nx);
+        double f = 0.0;
+        for (int i = 0; i < nx; i++)
+        {
+            x.at(i) += 1.0;
+        }
+        for (int i = 0; i < nx - 1; i++)
+        {
+            double item = 0.0;
+            item = item + 100.0 * pow((pow(x.at(i), 2) - x.at(i + 1)), 2);
+            item = item + pow((x.at(i) - 1.0), 2);
+            f = f + item;
+        }
+        return f;
+    }
 
-    // void schaffer_F7_func(double *x, double *f, int nx, double *Os, double
-    // *Mr,
-    //                       int s_flag, int r_flag, double *y)
-    // {
-    //     int i;
-    //     double tmp;
-    //     f[0] = 0.0;
-    //     double *z = calloc(nx, sizeof(double));
-    //     sr_func(x, z, nx, Os, Mr, 1.0, s_flag, r_flag, y);
-    //     for (i = 0; i < nx - 1; i++)
-    //     {
-    //         z[i] = pow(y[i] * y[i] + y[i + 1] * y[i + 1], 0.5);
-    //         tmp = sin(50.0 * pow(z[i], 0.2));
-    //         f[0] += pow(z[i], 0.5) + pow(z[i], 0.5) * tmp * tmp;
-    //     }
-    //     f[0] = f[0] * f[0] / (nx - 1) / (nx - 1);
-    //     free(z);
-    // }
+    double schaffer_F7_func(std::vector<double> &x,
+                            const std::vector<double> &Os,
+                            const std::vector<double> &Mr, bool s_flag,
+                            bool r_flag, int nx)
+    {
+        sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+        double f = 0.0;
+        for (size_t i = 0; i < x.size() - 1; i++)
+        {
+            double xi = x.at(i);
+            double xi1 = x.at(i + 1);
+            double si = pow(pow(xi, 2) + pow(xi1, 2), 0.5);
+            double tmp = sin(50.0 * pow(si, 0.2));
+            f += pow(si, 0.5) + pow(si, 0.5) * tmp * tmp;
+        }
+        f = f * f / (nx - 1) / (nx - 1);
+        return f;
+    }
 
     // void ackley_func(double *x, double *f, int nx, double *Os, double *Mr,
     //                  int s_flag, int r_flag)
@@ -606,24 +592,19 @@ namespace ioh::problem::cec
     //     f[0] += sum;
     // }
 
-    // void step_rastrigin_func(double *x, double *f, int nx, double *Os,
-    //                          double *Mr, int s_flag, int r_flag)
-    // {
-    //     f[0] = 0.0;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-    //     /*for (int i = 0; i < nx; i++) {*/
-    //     /*if (fabs(y[i] - Os[i]) > 0.5)*/
-    //     /*y[i] = Os[i] + floor(2 * (y[i] - Os[i]) + 0.5) / 2;*/
-    //     /*}*/
-    //     sr_func(x, z, nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag, y);
-    //     for (int i = 0; i < nx; i++)
-    //     {
-    //         f[0] += (z[i] * z[i] - 10.0 * cos(2.0 * M_PI * z[i]) + 10.0);
-    //     }
-    //     free(y);
-    //     free(z);
-    // }
+    double step_rastrigin_func(std::vector<double> &x,
+                               const std::vector<double> &Os,
+                               const std::vector<double> &Mr, bool s_flag,
+                               bool r_flag, int nx)
+    {
+        sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
+        double f = 0.0;
+        for (int i = 0; i < nx; i++)
+        {
+            f += pow(x.at(i), 2) - 10.0 * cos(2.0 * M_PI * x.at(i)) + 10.0;
+        }
+        return f;
+    }
 
     // void bi_rastrigin_func(double *x, double *f, int nx, double *Os, double
     // *Mr,
