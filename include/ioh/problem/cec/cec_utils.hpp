@@ -1,8 +1,6 @@
 #pragma once
 
-#include "ioh/common/factory.hpp"
 #include "ioh/problem/problem.hpp"
-#include "ioh/problem/transformation.hpp"
 
 
 namespace ioh::problem::cec
@@ -13,8 +11,8 @@ namespace ioh::problem::cec
         int dataLoaded = 0;
         int prevFunction = 0;
         int prevDimension = 0;
-        std::vector<double> M;
-        std::vector<double> OShift;
+        std::vector<double> Mr;
+        std::vector<double> Os;
         std::vector<double> bias;
         std::vector<int> SS;
     };
@@ -43,10 +41,10 @@ namespace ioh::problem::cec
     }
 
     void sr_func(std::vector<double> &x, const std::vector<double> &Os,
-                 const std::vector<double> &Mr, double sh_rate, int s_flag,
-                 int r_flag, int nx)
+                 const std::vector<double> &Mr, double sh_rate, bool s_flag,
+                 bool r_flag, int nx)
     {
-        if (s_flag == 1)
+        if (s_flag)
         {
             shiftfunc(x, Os, nx);
         }
@@ -54,7 +52,7 @@ namespace ioh::problem::cec
         {
             x.at(i) = x.at(i) * sh_rate;
         }
-        if (r_flag == 1)
+        if (r_flag)
         {
             rotatefunc(x, Mr, nx);
         }
@@ -136,7 +134,7 @@ namespace ioh::problem::cec
             }
             double matrixData;
             fptMData >> matrixData;
-            cd->M.push_back(matrixData);
+            cd->Mr.push_back(matrixData);
         }
         fptMData.close();
     }
@@ -198,7 +196,7 @@ namespace ioh::problem::cec
                 }
                 double shiftData;
                 fptOShiftData >> shiftData;
-                cd->OShift.push_back(shiftData);
+                cd->Os.push_back(shiftData);
             }
         }
         // else
