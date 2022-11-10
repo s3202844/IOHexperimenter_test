@@ -5,18 +5,6 @@
 
 namespace ioh::problem::cec
 {
-    typedef struct CecData CecData;
-    struct CecData
-    {
-        int dataLoaded = 0;
-        int prevFunction = 0;
-        int prevDimension = 0;
-        std::vector<double> Mr;
-        std::vector<double> Os;
-        std::vector<double> bias;
-        std::vector<int> SS;
-    };
-
     void shiftfunc(std::vector<double> &x, const std::vector<double> &Os,
                    int nx)
     {
@@ -74,8 +62,8 @@ namespace ioh::problem::cec
         return bias;
     }
 
-    void loadMatrixData(CecData *cd, std::string dataPath, int dim, int fn,
-                        int cecVersion)
+    void loadMatrixData(std::vector<double> *Mr, std::string dataPath, int dim,
+                        int fn, int cecVersion)
     {
         int funcTreshold, coeff = 0;
         if (cecVersion == 2014)
@@ -134,13 +122,13 @@ namespace ioh::problem::cec
             }
             double matrixData;
             fptMData >> matrixData;
-            cd->Mr.push_back(matrixData);
+            Mr->push_back(matrixData);
         }
         fptMData.close();
     }
 
-    void loadOShiftData(CecData *cd, std::string dataPath, int dim, int fn,
-                        int cecVersion)
+    void loadOShiftData(std::vector<double> *Os, std::string dataPath, int dim,
+                        int fn, int cecVersion)
     {
         int funcTreshold = 0;
         int coeff = 0;
@@ -196,7 +184,7 @@ namespace ioh::problem::cec
                 }
                 double shiftData;
                 fptOShiftData >> shiftData;
-                cd->Os.push_back(shiftData);
+                Os->push_back(shiftData);
             }
         }
         // else

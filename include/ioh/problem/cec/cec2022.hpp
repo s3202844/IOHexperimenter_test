@@ -12,6 +12,11 @@ namespace ioh::problem
     //! CEC2022 base class
     class CEC2022 : public Real
     {
+    protected:
+        int fn_;
+        int nx_;
+        std::vector<double> Os_;
+        std::vector<double> Mr_;
 
     public:
         /**
@@ -27,8 +32,19 @@ namespace ioh::problem
             Real(MetaData(problem_id, instance, name, n_variables),
                  Bounds<double>(n_variables, -100, 100))
         {
+            fn_ = problem_id;
+            nx_ = n_variables;
+            loadCecData();
             // optimum_=0;
             log_info_.optimum = optimum_;
+        }
+
+        void loadCecData()
+        {
+            std::string dataPath =
+                "/usr/local/include/ioh/problem/cec/cec_data";
+            cec::loadOShiftData(&Os_, dataPath, nx_, fn_, 2022);
+            cec::loadMatrixData(&Mr_, dataPath, nx_, fn_, 2022);
         }
     };
 
@@ -43,13 +59,8 @@ namespace ioh::problem
                            AutomaticProblemRegistration<ProblemType, CEC2022>,
                            AutomaticProblemRegistration<ProblemType, Real>
     {
-    protected:
-        int fn_;
-        int nx_;
 
     public:
-        std::vector<double> Os_;
-        std::vector<double> Mr_;
         /**
          * @brief Construct a new BBOProblem object
          *
@@ -62,8 +73,6 @@ namespace ioh::problem
                        const int n_variables, const std::string &name) :
             CEC2022(problem_id, instance, n_variables, name)
         {
-            fn_ = problem_id;
-            nx_ = n_variables;
         }
     };
 } // namespace ioh::problem
