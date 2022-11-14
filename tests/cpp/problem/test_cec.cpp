@@ -29,7 +29,7 @@ TEST_F(BaseTest, loadMatrixData)
 }
 
 
-TEST_F(BaseTest, cec2022_basic)
+TEST_F(BaseTest, DISABLED_cec2022_basic)
 {
     const auto &problem_factory =
         ioh::problem::ProblemRegistry<ioh::problem::CEC2022>::instance();
@@ -113,4 +113,19 @@ TEST_F(BaseTest, cec2022_basic)
         }
     }
     file5.close();
+}
+
+
+TEST_F(BaseTest, cec2022_hybrid)
+{
+    std::vector<int> SS;
+    std::vector<double> Os, Mr, x;
+    for (int i = 0; i < 10; i++)
+        x.push_back(i * 1.0);
+    std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
+    loadOShiftData(&Os, dataPath, 10, 6, 2022);
+    loadMatrixData(&Mr, dataPath, 10, 6, 2022);
+    loadShuffleData(&SS, dataPath, 10, 6, 2022);
+    double f = cec2022_hf01(x, Os, Mr, SS, true, true, 10);
+    printf("%f\n", f);
 }

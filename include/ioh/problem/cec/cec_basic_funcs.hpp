@@ -6,24 +6,19 @@
 
 namespace ioh::problem::cec
 {
-    // void bent_cigar_func(double *x, double *f, int nx, double *Os, double
-    // *Mr,
-    //                      int s_flag, int r_flag) /* Bent_Cigar */
-    // {
-    //     int i;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-    //     sr_func(x, z, nx, Os, Mr, 1.0, s_flag, r_flag,
-    //             y); /* shift and rotate */
-
-    //     f[0] = z[0] * z[0];
-    //     for (i = 1; i < nx; i++)
-    //     {
-    //         f[0] += pow(10.0, 6.0) * z[i] * z[i];
-    //     }
-    //     free(y);
-    //     free(z);
-    // }
+    double bent_cigar_func(std::vector<double> &x,
+                           const std::vector<double> &Os,
+                           const std::vector<double> &Mr, bool s_flag,
+                           bool r_flag, int nx)
+    {
+        sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+        double f = x.at(0) * x.at(0);
+        for (int i = 1; i < nx; i++)
+        {
+            f += pow(10.0, 6.0) * x.at(i) * x.at(i);
+        }
+        return f;
+    }
 
     // void sphere_func(double *x, double *f, int nx, double *Os, double *Mr,
     //                  int s_flag, int r_flag)
@@ -254,21 +249,18 @@ namespace ioh::problem::cec
     //     free(z);
     // }
 
-    // void rastrigin_func(double *x, double *f, int nx, double *Os, double *Mr,
-    //                     int s_flag, int r_flag)
-    // {
-    //     int i;
-    //     f[0] = 0.0;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-    //     sr_func(x, z, nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag, y);
-    //     for (i = 0; i < nx; i++)
-    //     {
-    //         f[0] += (z[i] * z[i] - 10.0 * cos(2.0 * M_PI * z[i]) + 10.0);
-    //     }
-    //     free(y);
-    //     free(z);
-    // }
+    double rastrigin_func(std::vector<double> &x, const std::vector<double> &Os,
+                          const std::vector<double> &Mr, bool s_flag,
+                          bool r_flag, int nx)
+    {
+        sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
+        double f = 0.0;
+        for (int i = 0; i < nx; i++)
+        {
+            f += pow(x.at(i), 2) - 10.0 * cos(2.0 * M_PI * x.at(i)) + 10.0;
+        }
+        return f;
+    }
 
     // void schwefel_func(double *x, double *f, int nx, double *Os, double *Mr,
     //                    int s_flag, int r_flag)
@@ -410,29 +402,26 @@ namespace ioh::problem::cec
     //     free(z);
     // }
 
-    // void hgbat_func(double *x, double *f, int nx, double *Os, double *Mr,
-    //                 int s_flag, int r_flag)
-    // {
-    //     int i;
-    //     double alpha, r2, sum_z;
-    //     alpha = 1.0 / 4.0;
-    //     double *y = calloc(nx, sizeof(double));
-    //     double *z = calloc(nx, sizeof(double));
-
-    //     sr_func(x, z, nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag, y);
-    //     r2 = 0.0;
-    //     sum_z = 0.0;
-    //     for (i = 0; i < nx; i++)
-    //     {
-    //         z[i] = z[i] - 1.0; // shift to orgin
-    //         r2 += z[i] * z[i];
-    //         sum_z += z[i];
-    //     }
-    //     f[0] = pow(fabs(pow(r2, 2.0) - pow(sum_z, 2.0)), 2 * alpha) +
-    //         (0.5 * r2 + sum_z) / nx + 0.5;
-    //     free(y);
-    //     free(z);
-    // }
+    double hgbat_func(std::vector<double> &x, const std::vector<double> &Os,
+                      const std::vector<double> &Mr, bool s_flag, bool r_flag,
+                      int nx)
+    {
+        sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
+        double f = 0.0;
+        double alpha, r2, sum_z;
+        alpha = 1.0 / 4.0;
+        r2 = 0.0;
+        sum_z = 0.0;
+        for (int i = 0; i < nx; i++)
+        {
+            x.at(i) = x.at(i) - 1.0;
+            r2 += x.at(i) * x.at(i);
+            sum_z += x.at(i);
+        }
+        f = pow(fabs(pow(r2, 2.0) - pow(sum_z, 2.0)), 2 * alpha) +
+            (0.5 * r2 + sum_z) / nx + 0.5;
+        return f;
+    }
 
     double zakharov_func(std::vector<double> &x, const std::vector<double> &Os,
                          const std::vector<double> &Mr, bool s_flag,

@@ -219,4 +219,68 @@ namespace ioh::problem::cec
         // }
         fptOShiftData.close();
     }
+
+    void loadShuffleData(std::vector<int> *SS, std::string dataPath, int dim,
+                         int fn, int cecVersion)
+    {
+        int coeff = 0;
+        int shuffleFlag = 0;
+        if (cecVersion == 2014 || cecVersion == 2017 || cecVersion == 2019 ||
+            cecVersion == 2021 || cecVersion == 2022)
+        {
+            coeff = 10;
+        }
+        else if (cecVersion == 2015)
+        {
+            int cf_nums[] = {0, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 5, 5, 5, 7, 10};
+            coeff = cf_nums[fn];
+        }
+        if (cecVersion == 2014)
+        {
+            shuffleFlag = (fn >= 17 && fn <= 22) ? 1 : 0;
+        }
+        else if (cecVersion == 2015)
+        {
+            shuffleFlag = 0;
+        }
+        else if (cecVersion == 2017)
+        {
+            shuffleFlag = (fn >= 11 && fn <= 20) ? 1 : 0;
+        }
+        else if (cecVersion == 2021)
+        {
+            shuffleFlag = (fn >= 5 && fn <= 7) ? 1 : 0;
+        }
+        else if (cecVersion == 2022)
+        {
+            shuffleFlag = (fn >= 6 && fn <= 8) ? 1 : 0;
+        }
+
+        std::string FileName;
+        std::stringstream ss;
+        std::ifstream fptShuffleData;
+        ss << dataPath << "/cec" << std::to_string(cecVersion)
+           << "/shuffle_data_" << std::to_string(fn) << "_D"
+           << std::to_string(dim) << ".txt";
+        FileName = ss.str();
+        fptShuffleData.open(FileName);
+        if (!fptShuffleData)
+        {
+            perror("Error: Cannot open input file for reading");
+        }
+        int ShuffleSize = shuffleFlag ? dim : coeff * dim;
+        for (int i = 0; i < ShuffleSize; ++i)
+        {
+            if (fptShuffleData.peek() == EOF)
+            {
+                break;
+            }
+            double shuffleData;
+            fptShuffleData >> shuffleData;
+            SS->push_back(shuffleData);
+        }
+        fptShuffleData.close();
+    }
+
+
 } // namespace ioh::problem::cec
