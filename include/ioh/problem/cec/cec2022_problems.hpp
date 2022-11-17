@@ -11,7 +11,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            double f = cec::zakharov_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f =
+                cec_basic_funcs_.zakharov_func(sr_x, Os_, Mr_, true, true, nx_);
             return f + 300.0;
         }
 
@@ -28,7 +29,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            double f = cec::rosenbrock_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec_basic_funcs_.rosenbrock_func(sr_x, Os_, Mr_, true,
+                                                        true, nx_);
             return f + 400.0;
         }
 
@@ -45,7 +47,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            double f = cec::schaffer_F7_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec_basic_funcs_.schaffer_F7_func(sr_x, Os_, Mr_, true,
+                                                         true, nx_);
             return f + 600.0;
         }
 
@@ -62,8 +65,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            double f =
-                cec::step_rastrigin_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f = cec_basic_funcs_.step_rastrigin_func(sr_x, Os_, Mr_,
+                                                            true, true, nx_);
             return f + 800.0;
         }
 
@@ -80,7 +83,8 @@ namespace ioh::problem::cec
         double evaluate(const std::vector<double> &x) override
         {
             std::vector<double> sr_x(x);
-            double f = cec::levy_func(sr_x, Os_, Mr_, true, true, nx_);
+            double f =
+                cec_basic_funcs_.levy_func(sr_x, Os_, Mr_, true, true, nx_);
             return f + 900.0;
         }
 

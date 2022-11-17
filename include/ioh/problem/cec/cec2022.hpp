@@ -2,7 +2,6 @@
 
 #include "cec_basic_funcs.hpp"
 #include "cec_utils.hpp"
-#include "ioh/problem/problem.hpp"
 
 
 namespace ioh::problem
@@ -17,6 +16,8 @@ namespace ioh::problem
         int nx_;
         std::vector<double> Os_;
         std::vector<double> Mr_;
+        cec::CecUtils cec_utils_;
+        cec::CecBasicFuncs cec_basic_funcs_;
 
     public:
         /**
@@ -43,8 +44,8 @@ namespace ioh::problem
         {
             std::string dataPath =
                 "/usr/local/include/ioh/problem/cec/cec_data";
-            cec::loadOShiftData(&Os_, dataPath, nx_, fn_, 2022);
-            cec::loadMatrixData(&Mr_, dataPath, nx_, fn_, 2022);
+            cec_utils_.loadOShiftData(&Os_, dataPath, nx_, fn_, 2022);
+            cec_utils_.loadMatrixData(&Mr_, dataPath, nx_, fn_, 2022);
         }
     };
 

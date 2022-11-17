@@ -36,7 +36,7 @@ namespace ioh::problem::cec
         }
     }
 
-    double cec2022_hf01(std::vector<double> &x, const std::vector<double> &Os,
+    const double cec2022_hf01(std::vector<double> &x, const std::vector<double> &Os,
                         const std::vector<double> &Mr,
                         const std::vector<int> &SS, bool s_flag, bool r_flag,
                         int nx)

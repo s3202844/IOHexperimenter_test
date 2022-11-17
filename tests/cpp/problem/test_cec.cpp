@@ -4,11 +4,13 @@
 
 using namespace ioh::problem::cec;
 
+CecUtils cec_utils;
+
 TEST_F(BaseTest, loadOShiftData)
 {
     std::vector<double> Os;
     std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
-    loadOShiftData(&Os, dataPath, 2, 1, 2022);
+    cec_utils.loadOShiftData(&Os, dataPath, 2, 1, 2022);
     for (auto d : Os)
     {
         std::cout << d << " ";
@@ -20,7 +22,7 @@ TEST_F(BaseTest, loadMatrixData)
 {
     std::vector<double> Mr;
     std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
-    loadMatrixData(&Mr, dataPath, 2, 1, 2022);
+    cec_utils.loadMatrixData(&Mr, dataPath, 2, 1, 2022);
     for (auto d : Mr)
     {
         std::cout << d << " ";
@@ -116,16 +118,16 @@ TEST_F(BaseTest, DISABLED_cec2022_basic)
 }
 
 
-TEST_F(BaseTest, cec2022_hybrid)
-{
-    std::vector<int> SS;
-    std::vector<double> Os, Mr, x;
-    for (int i = 0; i < 10; i++)
-        x.push_back(i * 1.0);
-    std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
-    loadOShiftData(&Os, dataPath, 10, 6, 2022);
-    loadMatrixData(&Mr, dataPath, 10, 6, 2022);
-    loadShuffleData(&SS, dataPath, 10, 6, 2022);
-    double f = cec2022_hf01(x, Os, Mr, SS, true, true, 10);
-    printf("%f\n", f);
-}
+// TEST_F(BaseTest, cec2022_hybrid)
+// {
+//     std::vector<int> SS;
+//     std::vector<double> Os, Mr, x;
+//     for (int i = 0; i < 10; i++)
+//         x.push_back(i * 1.0);
+//     std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
+//     cec_utils.loadOShiftData(&Os, dataPath, 10, 6, 2022);
+//     cec_utils.loadMatrixData(&Mr, dataPath, 10, 6, 2022);
+//     cec_utils.loadShuffleData(&SS, dataPath, 10, 6, 2022);
+//     double f = cec2022_hf01(x, Os, Mr, SS, true, true, 10);
+//     printf("%f\n", f);
+// }
