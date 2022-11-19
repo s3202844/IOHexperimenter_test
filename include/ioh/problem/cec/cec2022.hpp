@@ -35,7 +35,8 @@ namespace ioh::problem
         {
             fn_ = problem_id;
             nx_ = n_variables;
-            loadCecData();
+            if (nx_ != 1)
+                loadCecData();
             // optimum_=0;
             log_info_.optimum = optimum_;
         }
