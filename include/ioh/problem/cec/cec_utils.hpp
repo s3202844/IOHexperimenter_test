@@ -334,7 +334,6 @@ namespace ioh::problem::cec
             {
                 f = f + w[i] / w_sum * fit[i];
             }
-            free(w);
             return f;
         }
     };
