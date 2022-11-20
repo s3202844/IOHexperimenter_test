@@ -8,14 +8,14 @@ namespace ioh::problem::cec
     class CecBasicFuncs
     {
     public:
-        CecUtils cec_utils;
+        CecUtils cec_utils_;
 
         double bent_cigar_func(std::vector<double> &x,
                                const std::vector<double> &Os,
                                const std::vector<double> &Mr, bool s_flag,
                                bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+            cec_utils_.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             double f = x.at(0) * x.at(0);
             for (int i = 1; i < nx; i++)
             {
@@ -83,7 +83,8 @@ namespace ioh::problem::cec
                          const std::vector<double> &Mr, bool s_flag,
                          bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+            double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             double *w;
             w = (double *)malloc(sizeof(double) * nx);
             for (int i = 0; i < nx; i++)
@@ -94,7 +95,6 @@ namespace ioh::problem::cec
             double term3 = pow((w[nx - 1] - 1), 2) *
                 (1 + pow((sin(2 * M_PI * w[nx - 1])), 2));
 
-            double f = 0.0;
             for (int i = 0; i < nx - 1; i++)
             {
                 double wi = w[i];
@@ -103,6 +103,7 @@ namespace ioh::problem::cec
                 f = f + newv;
             }
             f = term1 + f + term3;
+            free(w);
             return f;
         }
 
@@ -146,8 +147,8 @@ namespace ioh::problem::cec
                                const std::vector<double> &Mr, bool s_flag,
                                bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 2.048 / 100.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 2.048 / 100.0, s_flag, r_flag, nx);
             for (int i = 0; i < nx; i++)
             {
                 x.at(i) += 1.0;
@@ -167,8 +168,8 @@ namespace ioh::problem::cec
                                 const std::vector<double> &Mr, bool s_flag,
                                 bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             for (size_t i = 0; i < x.size() - 1; i++)
             {
                 double xi = x.at(i);
@@ -181,31 +182,25 @@ namespace ioh::problem::cec
             return f;
         }
 
-        // void ackley_func(double *x, double *f, int nx, double *Os, double
-        // *Mr,
-        //                  int s_flag, int r_flag)
-        // {
-        //     int i;
-        //     double sum1 = 0.0;
-        //     double sum2 = 0.0;
-        //     double *y = calloc(nx, sizeof(double));
-        //     double *z = calloc(nx, sizeof(double));
-
-        //     sr_func(x, z, nx, Os, Mr, 1.0, s_flag, r_flag, y); /* shift and
-        //     rotate
-        //                                                         */
-
-        //     for (i = 0; i < nx; i++)
-        //     {
-        //         sum1 += z[i] * z[i];
-        //         sum2 += cos(2.0 * M_PI * z[i]);
-        //     }
-        //     sum1 = -0.2 * sqrt(sum1 / nx);
-        //     sum2 /= nx;
-        //     f[0] = E - 20.0 * exp(sum1) - exp(sum2) + 20.0;
-        //     free(y);
-        //     free(z);
-        // }
+        double ackley_func(std::vector<double> &x,
+                           const std::vector<double> &Os,
+                           const std::vector<double> &Mr, bool s_flag,
+                           bool r_flag, int nx)
+        {
+            double f = 0.0;
+            double sum1 = 0.0;
+            double sum2 = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
+            for (int i = 0; i < nx; i++)
+            {
+                sum1 += x.at(i) * x.at(i);
+                sum2 += cos(2.0 * M_PI * x.at(i));
+            }
+            sum1 = -0.2 * sqrt(sum1 / nx);
+            sum2 /= nx;
+            f = E - 20.0 * exp(sum1) - exp(sum2) + 20.0;
+            return f;
+        }
 
         // void weierstrass_func(double *x, double *f, int nx, double *Os,
         // double *Mr,
@@ -264,8 +259,8 @@ namespace ioh::problem::cec
                               const std::vector<double> &Mr, bool s_flag,
                               bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
             for (int i = 0; i < nx; i++)
             {
                 f += pow(x.at(i), 2) - 10.0 * cos(2.0 * M_PI * x.at(i)) + 10.0;
@@ -273,98 +268,86 @@ namespace ioh::problem::cec
             return f;
         }
 
-        // void schwefel_func(double *x, double *f, int nx, double *Os, double
-        // *Mr,
-        //                    int s_flag, int r_flag)
-        // {
-        //     int i;
-        //     double tmp;
-        //     f[0] = 0.0;
-        //     double *y = calloc(nx, sizeof(double));
-        //     double *z = calloc(nx, sizeof(double));
+        double schwefel_func(std::vector<double> &x,
+                             const std::vector<double> &Os,
+                             const std::vector<double> &Mr, bool s_flag,
+                             bool r_flag, int nx)
+        {
+            double f = 0.0;
+            double tmp = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 1000.0 / 100.0, s_flag, r_flag, nx);
+            for (int i = 0; i < nx; i++)
+            {
+                x.at(i) += 4.209687462275036e+002;
+                if (x.at(i) > 500)
+                {
+                    f -= (500.0 - fmod(x.at(i), 500)) *
+                        sin(pow(500.0 - fmod(x.at(i), 500), 0.5));
+                    tmp = (x.at(i) - 500.0) / 100;
+                    f += tmp * tmp / nx;
+                }
+                else if (x.at(i) < -500)
+                {
+                    f -= (-500.0 + fmod(fabs(x.at(i)), 500)) *
+                        sin(pow(500.0 - fmod(fabs(x.at(i)), 500), 0.5));
+                    tmp = (x.at(i) + 500.0) / 100;
+                    f += tmp * tmp / nx;
+                }
+                else
+                {
+                    f -= x.at(i) * sin(pow(fabs(x.at(i)), 0.5));
+                }
+            }
+            f += 4.189828872724338e+002 * nx;
+            return f;
+        }
 
-        //     sr_func(x, z, nx, Os, Mr, 1000.0 / 100.0, s_flag, r_flag, y);
+        double katsuura_func(std::vector<double> &x,
+                             const std::vector<double> &Os,
+                             const std::vector<double> &Mr, bool s_flag,
+                             bool r_flag, int nx)
+        {
+            double f = 0.0;
+            double tmp3 = pow(1.0 * nx, 1.2);
+            cec_utils_.sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
+            for (int i = 0; i < nx; i++)
+            {
+                double temp = 0.0;
+                for (int j = 1; j <= 32; j++)
+                {
+                    double tmp1 = pow(2.0, j);
+                    double tmp2 = tmp1 * x.at(i);
+                    temp += fabs(tmp2 - floor(tmp2 + 0.5)) / tmp1;
+                }
+                f *= pow(1.0 + (i + 1) * temp, 10.0 / tmp3);
+            }
+            double tmp1 = 10.0 / nx / nx;
+            f = f * tmp1 - tmp1;
+            return f;
+        }
 
-        //     for (i = 0; i < nx; i++)
-        //     {
-        //         z[i] += 4.209687462275036e+002;
-        //         if (z[i] > 500)
-        //         {
-        //             f[0] -= (500.0 - fmod(z[i], 500)) *
-        //                 sin(pow(500.0 - fmod(z[i], 500), 0.5));
-        //             tmp = (z[i] - 500.0) / 100;
-        //             f[0] += tmp * tmp / nx;
-        //         }
-        //         else if (z[i] < -500)
-        //         {
-        //             f[0] -= (-500.0 + fmod(fabs(z[i]), 500)) *
-        //                 sin(pow(500.0 - fmod(fabs(z[i]), 500), 0.5));
-        //             tmp = (z[i] + 500.0) / 100;
-        //             f[0] += tmp * tmp / nx;
-        //         }
-        //         else
-        //             f[0] -= z[i] * sin(pow(fabs(z[i]), 0.5));
-        //     }
-        //     f[0] += 4.189828872724338e+002 * nx;
-        //     free(y);
-        //     free(z);
-        // }
-
-        // void katsuura_func(double *x, double *f, int nx, double *Os, double
-        // *Mr,
-        //                    int s_flag, int r_flag)
-        // {
-        //     int i, j;
-        //     double temp, tmp1, tmp2, tmp3;
-        //     f[0] = 1.0;
-        //     tmp3 = pow(1.0 * nx, 1.2);
-        //     double *y = calloc(nx, sizeof(double));
-        //     double *z = calloc(nx, sizeof(double));
-        //     sr_func(x, z, nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag, y);
-
-        //     for (i = 0; i < nx; i++)
-        //     {
-        //         temp = 0.0;
-        //         for (j = 1; j <= 32; j++)
-        //         {
-        //             tmp1 = pow(2.0, j);
-        //             tmp2 = tmp1 * z[i];
-        //             temp += fabs(tmp2 - floor(tmp2 + 0.5)) / tmp1;
-        //         }
-        //         f[0] *= pow(1.0 + (i + 1) * temp, 10.0 / tmp3);
-        //     }
-        //     tmp1 = 10.0 / nx / nx;
-        //     f[0] = f[0] * tmp1 - tmp1;
-        //     free(y);
-        //     free(z);
-        // }
-
-        // void grie_rosen_func(double *x, double *f, int nx, double *Os, double
-        // *Mr,
-        //                      int s_flag, int r_flag)
-        // {
-        //     int i;
-        //     double temp, tmp1, tmp2;
-        //     f[0] = 0.0;
-        //     double *y = calloc(nx, sizeof(double));
-        //     double *z = calloc(nx, sizeof(double));
-        //     sr_func(x, z, nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag, y);
-        //     z[0] += 1.0; // shift to orgin
-        //     for (i = 0; i < nx - 1; i++)
-        //     {
-        //         z[i + 1] += 1.0; // shift to orgin
-        //         tmp1 = z[i] * z[i] - z[i + 1];
-        //         tmp2 = z[i] - 1.0;
-        //         temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
-        //         f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
-        //     }
-        //     tmp1 = z[nx - 1] * z[nx - 1] - z[0];
-        //     tmp2 = z[nx - 1] - 1.0;
-        //     temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
-        //     f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
-        //     free(y);
-        //     free(z);
-        // }
+        double grie_rosen_func(std::vector<double> &x,
+                               const std::vector<double> &Os,
+                               const std::vector<double> &Mr, bool s_flag,
+                               bool r_flag, int nx)
+        {
+            double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
+            x.at(0) += 1.0;
+            for (int i = 0; i < nx - 1; i++)
+            {
+                x.at(i + 1) += 1.0;
+                double tmp1 = x.at(i) * x.at(i) - x.at(i + 1);
+                double tmp2 = x.at(i) - 1.0;
+                double temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
+                f += (temp * temp) / 4000.0 - cos(temp) + 1.0;
+            }
+            double tmp1 = x.at(nx - 1) * x.at(nx - 1) - x.at(0);
+            double tmp2 = x.at(nx - 1) - 1.0;
+            double temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
+            f += (temp * temp) / 4000.0 - cos(temp) + 1.0;
+            return f;
+        }
 
         // void escaffer6_func(double *x, double *f, int nx, double *Os, double
         // *Mr,
@@ -394,34 +377,33 @@ namespace ioh::problem::cec
         //     free(y);
         // }
 
-        // void happycat_func(double *x, double *f, int nx, double *Os, double
-        // *Mr,
-        //                    int s_flag, int r_flag)
-        // {
-        //     int i;
-        //     double alpha, r2, sum_z;
-        //     alpha = 1.0 / 8.0;
-        //     double *y = calloc(nx, sizeof(double));
-        //     double *z = calloc(nx, sizeof(double));
-        //     sr_func(x, z, nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag, y);
-        //     r2 = 0.0;
-        //     sum_z = 0.0;
-        //     for (i = 0; i < nx; i++)
-        //     {
-        //         z[i] = z[i] - 1.0; // shift to orgin
-        //         r2 += z[i] * z[i];
-        //         sum_z += z[i];
-        //     }
-        //     f[0] = pow(fabs(r2 - nx), 2 * alpha) + (0.5 * r2 + sum_z) / nx +
-        //     0.5; free(y); free(z);
-        // }
+        double happycat_func(std::vector<double> &x,
+                             const std::vector<double> &Os,
+                             const std::vector<double> &Mr, bool s_flag,
+                             bool r_flag, int nx)
+        {
+            double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
+            double alpha, r2, sum_z;
+            alpha = 1.0 / 8.0;
+            r2 = 0.0;
+            sum_z = 0.0;
+            for (int i = 0; i < nx; i++)
+            {
+                x.at(i) = x.at(i) - 1.0;
+                r2 += x.at(i) * x.at(i);
+                sum_z += x.at(i);
+            }
+            f = pow(fabs(r2 - nx), 2 * alpha) + (0.5 * r2 + sum_z) / nx + 0.5;
+            return f;
+        }
 
         double hgbat_func(std::vector<double> &x, const std::vector<double> &Os,
                           const std::vector<double> &Mr, bool s_flag,
                           bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 5.0 / 100.0, s_flag, r_flag, nx);
             double alpha, r2, sum_z;
             alpha = 1.0 / 4.0;
             r2 = 0.0;
@@ -442,8 +424,8 @@ namespace ioh::problem::cec
                              const std::vector<double> &Mr, bool s_flag,
                              bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 1.0, s_flag, r_flag, nx);
             std::vector<double> terms = {0, 0};
             for (int i = 0; i < nx; i++)
             {
@@ -601,8 +583,8 @@ namespace ioh::problem::cec
                                    const std::vector<double> &Mr, bool s_flag,
                                    bool r_flag, int nx)
         {
-            cec_utils.sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
             double f = 0.0;
+            cec_utils_.sr_func(x, Os, Mr, 5.12 / 100.0, s_flag, r_flag, nx);
             for (int i = 0; i < nx; i++)
             {
                 f += pow(x.at(i), 2) - 10.0 * cos(2.0 * M_PI * x.at(i)) + 10.0;

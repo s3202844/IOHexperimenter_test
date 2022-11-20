@@ -3,6 +3,9 @@
 #include "ioh/problem/problem.hpp"
 #include "ioh/problem/transformation.hpp"
 
+#define INF 1.0e99
+#define E 2.7182818284590452353602874713526625
+
 
 namespace ioh::problem::cec
 {
@@ -66,7 +69,7 @@ namespace ioh::problem::cec
             return bias;
         }
 
-        void loadMatrixData(std::vector<double> *Mr, std::string dataPath,
+        void loadMatrixData(std::vector<double> &Mr, std::string dataPath,
                             int dim, int fn, int cecVersion)
         {
             int funcTreshold, coeff = 0;
@@ -128,12 +131,12 @@ namespace ioh::problem::cec
                 }
                 double matrixData;
                 fptMData >> matrixData;
-                Mr->push_back(matrixData);
+                Mr.push_back(matrixData);
             }
             fptMData.close();
         }
 
-        void loadOShiftData(std::vector<double> *Os, std::string dataPath,
+        void loadOShiftData(std::vector<double> &Os, std::string dataPath,
                             int dim, int fn, int cecVersion)
         {
             int funcTreshold = 0;
@@ -191,7 +194,7 @@ namespace ioh::problem::cec
                     }
                     double shiftData;
                     fptOShiftData >> shiftData;
-                    Os->push_back(shiftData);
+                    Os.push_back(shiftData);
                 }
             }
             // else
@@ -226,7 +229,7 @@ namespace ioh::problem::cec
             fptOShiftData.close();
         }
 
-        void loadShuffleData(std::vector<int> *SS, std::string dataPath,
+        void loadShuffleData(std::vector<int> &SS, std::string dataPath,
                              int dim, int fn, int cecVersion)
         {
             int coeff = 0;
@@ -284,9 +287,55 @@ namespace ioh::problem::cec
                 }
                 double shuffleData;
                 fptShuffleData >> shuffleData;
-                SS->push_back(shuffleData);
+                SS.push_back(shuffleData);
             }
             fptShuffleData.close();
+        }
+
+
+        double cf_cal(std::vector<double> &x, std::vector<double> &Os,
+                      std::vector<double> &delta, std::vector<double> &bias,
+                      std::vector<double> &fit, int cf_num, int nx)
+        {
+            double f = 0.0;
+            double w_max = 0.0, w_sum = 0.0;
+            std::vector<double> w(cf_num, 0);
+            for (int i = 0; i < cf_num; i++)
+            {
+                fit[i] += bias[i];
+                w[i] = 0;
+                for (int j = 0; j < nx; j++)
+                {
+                    w[i] += pow(x[j] - Os[i * nx + j], 2.0);
+                }
+                if (w[i] != 0)
+                {
+                    w[i] = pow(1.0 / w[i], 0.5) *
+                        exp(-w[i] / 2.0 / nx / pow(delta[i], 2.0));
+                }
+                else
+                {
+                    w[i] = INF;
+                }
+                if (w[i] > w_max)
+                    w_max = w[i];
+            }
+            for (int i = 0; i < cf_num; i++)
+            {
+                w_sum = w_sum + w[i];
+            }
+            if (w_max == 0)
+            {
+                for (int i = 0; i < cf_num; i++)
+                    w[i] = 1;
+                w_sum = cf_num;
+            }
+            for (int i = 0; i < cf_num; i++)
+            {
+                f = f + w[i] / w_sum * fit[i];
+            }
+            free(w);
+            return f;
         }
     };
 } // namespace ioh::problem::cec

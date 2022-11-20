@@ -10,7 +10,7 @@ TEST_F(BaseTest, loadOShiftData)
 {
     std::vector<double> Os;
     std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
-    cec_utils.loadOShiftData(&Os, dataPath, 2, 1, 2022);
+    cec_utils.loadOShiftData(Os, dataPath, 2, 1, 2022);
     for (auto d : Os)
     {
         std::cout << d << " ";
@@ -22,7 +22,7 @@ TEST_F(BaseTest, loadMatrixData)
 {
     std::vector<double> Mr;
     std::string dataPath = "/usr/local/include/ioh/problem/cec/cec_data";
-    cec_utils.loadMatrixData(&Mr, dataPath, 2, 1, 2022);
+    cec_utils.loadMatrixData(Mr, dataPath, 2, 1, 2022);
     for (auto d : Mr)
     {
         std::cout << d << " ";
