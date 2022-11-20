@@ -302,37 +302,36 @@ namespace ioh::problem::cec
             std::vector<double> w(cf_num, 0);
             for (int i = 0; i < cf_num; i++)
             {
-                fit[i] += bias[i];
-                w[i] = 0;
+                fit.at(i) += bias.at(i);
                 for (int j = 0; j < nx; j++)
                 {
-                    w[i] += pow(x[j] - Os[i * nx + j], 2.0);
+                    w.at(i) += pow(x.at(j) - Os.at(i * nx + j), 2.0);
                 }
-                if (w[i] != 0)
+                if (w.at(i) != 0)
                 {
-                    w[i] = pow(1.0 / w[i], 0.5) *
-                        exp(-w[i] / 2.0 / nx / pow(delta[i], 2.0));
+                    w.at(i) = pow(1.0 / w.at(i), 0.5) *
+                        exp(-w.at(i) / 2.0 / nx / pow(delta.at(i), 2.0));
                 }
                 else
                 {
-                    w[i] = INF;
+                    w.at(i) = INF;
                 }
-                if (w[i] > w_max)
-                    w_max = w[i];
+                if (w.at(i) > w_max)
+                    w_max = w.at(i);
             }
             for (int i = 0; i < cf_num; i++)
             {
-                w_sum = w_sum + w[i];
+                w_sum = w_sum + w.at(i);
             }
             if (w_max == 0)
             {
                 for (int i = 0; i < cf_num; i++)
-                    w[i] = 1;
+                    w.at(i) = 1;
                 w_sum = cf_num;
             }
             for (int i = 0; i < cf_num; i++)
             {
-                f = f + w[i] / w_sum * fit[i];
+                f = f + w.at(i) / w_sum * fit.at(i);
             }
             return f;
         }
