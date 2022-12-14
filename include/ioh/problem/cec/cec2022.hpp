@@ -38,6 +38,8 @@ namespace ioh::problem
             if (nx_ != 1)
                 loadCecData();
             // optimum_=0;
+            Solution<double> opt = Solution<double>(Os_, 0.);
+            optimum_ = opt;
             log_info_.optimum = optimum_;
         }
 
