@@ -16,8 +16,10 @@ namespace ioh::problem
         int nx_;
         std::vector<double> Os_;
         std::vector<double> Mr_;
+        std::vector<int> SS_;
         cec::CecUtils cec_utils_;
         cec::CecBasicFuncs cec_basic_funcs_;
+        cec::CecHybridFuncs cec_hybrid_funcs_;
 
     public:
         /**
@@ -49,6 +51,7 @@ namespace ioh::problem
                 "/usr/local/include/ioh/problem/cec/cec_data";
             cec_utils_.loadOShiftData(Os_, dataPath, nx_, fn_, 2022);
             cec_utils_.loadMatrixData(Mr_, dataPath, nx_, fn_, 2022);
+            cec_utils_.loadShuffleData(SS_, dataPath, nx_, fn_, 2022);
         }
     };
 

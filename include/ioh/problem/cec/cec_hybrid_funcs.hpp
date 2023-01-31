@@ -90,6 +90,7 @@ namespace ioh::problem::cec
                 Gx.at(5), Os, Mr, false, false, Gnx.at(5));
             return f1 + f2 + f3 + f4 + f5 + f6;
         }
+
         double cec2022_hf03(std::vector<double> &x,
                             const std::vector<double> &Os,
                             const std::vector<double> &Mr,
