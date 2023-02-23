@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cec_basic_funcs.hpp"
+#include "cec_hybrid_funcs.hpp"
 #include "cec_utils.hpp"
 
 
